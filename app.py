@@ -2,11 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+
 # Function to load the data
 @st.cache_data
 def load_data(file):
     df = pd.read_excel(file)
-    df['Fecha_De_Registro'] = pd.to_datetime(df['Fecha_De_Registro'])
+    
+    # Convert 'Fecha_De_Registro' to datetime, while handling 'am'/'pm'
+    df['Fecha_De_Registro'] = pd.to_datetime(df['Fecha_De_Registro'], format='%d/%m/%Y %I:%M%p')
+    
     df['day'] = df['Fecha_De_Registro'].dt.date
     df['week'] = df['Fecha_De_Registro'].dt.isocalendar().week
     df['month'] = df['Fecha_De_Registro'].dt.month
